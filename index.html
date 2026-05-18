@@ -17,7 +17,7 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       color: #0D1340;
       background: #fff;
-      overflow-x: hidden;
+      overflow-x: clip;
       line-height: 1.6;
     }
     img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -77,34 +77,48 @@
     .section-sub { font-size: 16px; color: var(--t-muted); line-height: 1.75; max-width: 520px; }
 
     /* ─────────────────────────── NAVBAR (fixed, pós-hero) ─────────────────────────── */
+    /* ── NAVBAR (fixed, aparece no scroll) ── */
     .navbar {
       position: fixed;
-      top: 20px;
-      z-index: 300;
-      background: rgba(255, 255, 255, 0.68);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.55);
-      box-shadow:
-        0 8px 32px rgba(8, 11, 36, 0.10),
-        0 2px 8px rgba(8, 11, 36, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1180px, calc(100vw - 40px));
+      z-index: 9999;
+      padding: 10px 10px 10px 28px;
       border-radius: 100px;
-      padding: 7px 7px 7px 22px;
-      opacity: 0;
-      transition: opacity .45s cubic-bezier(.4,0,.2,1);
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(255,255,255,.18);
+      transition: background .4s ease, border-color .4s ease, box-shadow .4s ease;
     }
-    .navbar.visible { opacity: 1; }
+    .navbar.pill {
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-color: rgba(255,255,255,.65);
+      box-shadow: 0 8px 32px rgba(8,11,36,.12), inset 0 1px 0 rgba(255,255,255,.95);
+    }
     .navbar .container {
-      max-width: none;
-      width: min(860px, calc(100vw - 48px));
-      margin: 0; padding: 0;
+      max-width: none; width: 100%; margin: 0; padding: 0;
       display: flex; align-items: center; justify-content: space-between; gap: 24px;
     }
+    .navbar .nav-links { gap: 28px; }
+    .navbar .nav-links a { color: rgba(255,255,255,.9) !important; font-size: 13.5px; font-weight: 500; transition: color .25s; }
+    .navbar .nav-links a:hover { color: #fff !important; }
+    .navbar.pill .nav-links a { color: var(--t-dark) !important; }
+    .navbar.pill .nav-links a:hover { color: var(--blue) !important; }
+    .navbar .nav-logo img { filter: brightness(0) invert(1); }
+    .navbar.pill .nav-logo img { filter: none; }
+    .navbar .btn-primary { background: rgba(255,255,255,.2); color: #fff !important; box-shadow: none; border: 1px solid rgba(255,255,255,.4); }
+    .navbar.pill .btn-primary { background: var(--blue); color: #fff !important; border: none; box-shadow: 0 4px 20px rgba(26,92,255,.35); }
+    .navbar .nav-mobile-btn { color: #fff !important; }
+    .navbar.pill .nav-mobile-btn { color: var(--t-dark) !important; }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
     .navbar .nav-logo { color: var(--t-dark); }
-    .navbar .nav-links a { color: var(--t-mid); font-size: 13px; font-weight: 500; transition: color .25s; }
+    .navbar .nav-links a { color: var(--t-mid); font-size: 13.5px; font-weight: 500; transition: color .25s; }
     .navbar .nav-links a:hover { color: var(--blue); }
-    .navbar .nav-links { gap: 22px; }
+    .navbar .nav-links { gap: 28px; }
+    .navbar .nav-mobile-btn { color: var(--t-dark); }
 
     /* ─────────────────────────── HERO NAV (flutua sobre imagem) ─────────────────────────── */
     .hero-nav {
@@ -491,7 +505,7 @@
     .nav-mobile-btn svg { width: 26px; height: 26px; }
 
     .mobile-menu {
-      display: flex; position: fixed; inset: 0; z-index: 500;
+      display: flex; position: fixed; inset: 0; z-index: 10000;
       background: rgba(7,9,30,.97); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
       flex-direction: column; align-items: center; justify-content: center;
       gap: 36px;
@@ -538,10 +552,9 @@
       .tag { font-size: 11px; }
 
       /* ── Navbar ── */
-      .hero-nav .nav-links, .hero-nav .btn-primary { display: none; }
       .navbar .nav-links, .navbar .btn-primary { display: none; }
+      .navbar { padding: 8px 12px 8px 16px; }
       .nav-mobile-btn { display: block; }
-      .navbar { padding: 8px 12px 8px 18px; }
 
       /* ── Hero ── */
       .hero { height: 80vh; min-height: 540px; }
@@ -634,8 +647,8 @@
 </head>
 <body style="background:#fff;">
 
-<!-- fixed nav that appears on scroll (hidden initially) -->
-<nav class="navbar fixed-nav" id="navbar">
+<!-- fixed nav that appears on scroll -->
+<nav class="navbar" id="navbar">
   <div class="container">
     <a href="#" class="nav-logo">
       <img src="assets/logo-clean.png" alt="Luna Clínica Odontológica">
@@ -649,33 +662,13 @@
     </ul>
     <a href="#contato" class="btn btn-primary" style="flex-shrink:0">Contato</a>
     <button class="nav-mobile-btn" id="navbarBtn" aria-label="Abrir menu">
-      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M3 6h18M3 12h18M3 18h18"/></svg>
+      <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
   </div>
 </nav>
 
 <!-- ╔═══ HERO ═══╗ -->
 <section class="hero" id="inicio">
-
-  <!-- Navbar floats over the hero image -->
-  <nav class="hero-nav">
-    <div class="container">
-      <a href="#" class="nav-logo">
-        <img src="assets/logo-clean.png" alt="Luna Clínica Odontológica">
-      </a>
-      <ul class="nav-links">
-        <li><a href="#inicio">Início</a></li>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#servicos">Serviços</a></li>
-        <li><a href="#depoimentos">Depoimentos</a></li>
-        <li><a href="#contato">Contato</a></li>
-      </ul>
-      <a href="#contato" class="btn btn-primary" style="flex-shrink:0;font-size:13px;padding:10px 22px">Contato</a>
-      <button class="nav-mobile-btn" id="heroNavBtn" aria-label="Abrir menu">
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M3 6h18M3 12h18M3 18h18"/></svg>
-      </button>
-    </div>
-  </nav>
 
   <!-- Full-bleed background image -->
   <div class="hero-bg">
@@ -999,17 +992,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
   gsap.registerPlugin(ScrollTrigger);
+
+  /* ── Navbar: transparente no topo → pill ao scrollar ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('pill', window.scrollY > 80);
+  }, { passive: true });
+
   window.addEventListener('load', () => {
     window.scrollTo(0, 0);
     ScrollTrigger.refresh();
   });
 
-  /* ── Navbar fixo aparece após 80px de scroll ── */
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 80) navbar.classList.add('visible');
-    else navbar.classList.remove('visible');
-  }, { passive: true });
 
   /* ── Hero entrance — imagem fade-in + texto sobe ── */
   const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -1200,7 +1194,6 @@
     const menu = document.getElementById('mobileMenu');
     const open  = () => menu.classList.add('open');
     const close = () => menu.classList.remove('open');
-    document.getElementById('heroNavBtn').addEventListener('click', open);
     document.getElementById('navbarBtn').addEventListener('click', open);
     document.getElementById('mobileMenuClose').addEventListener('click', close);
     menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
