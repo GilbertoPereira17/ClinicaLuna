@@ -996,6 +996,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.normalizeScroll(true);
 
   /* ── Navbar: transparente no topo → pill ao scrollar ── */
   const navbar = document.getElementById('navbar');
@@ -1004,6 +1005,7 @@
   }, { passive: true });
 
   window.addEventListener('load', () => {
+    history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
     ScrollTrigger.refresh();
   });
@@ -1155,10 +1157,9 @@
       });
     }
 
-    ScrollTrigger.matchMedia({
-      '(min-width: 769px)': () => buildDiffTrigger(true,  '+=2500'),
-      '(max-width: 768px)': () => buildDiffTrigger(false, 'bottom 25%'),
-    });
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 769px)', () => buildDiffTrigger(true,  '+=2500'));
+    mm.add('(max-width: 768px)', () => buildDiffTrigger(false, 'bottom 25%'));
 
     gsap.fromTo('.tooth-wrap',
       { scale: .65, opacity: 0 },
